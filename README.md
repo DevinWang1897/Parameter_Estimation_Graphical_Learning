@@ -7,4 +7,5 @@ Input of the model: initial inaccurate line parameters, distribution network top
 Output of the model: the estimated parameter estimation results.
 
 # How to Use
-1. Before using the code, a user should perepare all the needed input data and variables. These data and variables are saved in a file containing a matlab structure called "Input_struct".
+## Before using the code, a user should perepare all the needed input data and variables. These data and variables are saved in a file containing a matlab structure called "Input_struct". 
+1. xx
