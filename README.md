@@ -68,3 +68,13 @@ Run "NLGNNdiff_par_prior.m" to perform the constrained or MAP line parameter est
 
 The output files have similar format as "NLGNNdiff_par_basic.m".
 
+## Summarize the output of the parameter estimation
+Run "par_result_summary.m" to get a summary of the parameter estimation result. This code combines the results of each subnet and show the result of the full network. Some parameter should be defined by the user:
+1. folder_dir: The directory which contains the output of parameter estimation that a user want to look at.
+2. open_alg_seed_list: The list of SGD random seeds. This should match the folder_dir's files.
+3. subnet_num: The number of subnest. This should match the folder_dir's files.
+
+Output: (in the workspace after running the code)
+1. MADR_improve_end_table: A table of two columns. Colum 1 is the SGD seed, column 2 is the MADR improvement (%) of using this seed in the SGD. This table is meaningless if a user do not provide the true parameter values in the "Input_struct" when doing the parameter estimation.
+2. The global_w_end_full: This stores the estiamted line parameters (full network) of using different SGD seeds. A user can use this as the parameter estimation result.
+
