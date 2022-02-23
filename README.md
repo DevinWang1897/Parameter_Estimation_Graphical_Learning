@@ -42,7 +42,7 @@ Run "NLGNNdiff_par_basic.m" to perform the basic graphical learning algorithm to
 4. error_ratio: The assumed ratio of error of the initial parameters. For example, if we assume the initial parameters are within 50% of the true values, then we can set error_ratio to 0.5.
 5. batch_size: The size of the mini batches in SGD.
 6. max_iter: The maximum iteration numbers of the SGD.
-7. threshold_ratio: The ratio controlling how well the forward function converges. Smaller ratio means better convergence, but also means longer running time.
+7. threshold_ratio: The ratio controlling how well the forward function converges. Smaller ratio means better convergence, more accurate parameter estimation, but also means longer running time.
 8. early_stop_patience: Early stop patience.
 9. early_stop_threshold_ratio: A ration defining how much improvement is needed to becaled an improvement in early stopping.
 10. initial_step_size: Standard step size for each back tracking line search.
@@ -60,8 +60,10 @@ The output of the code is saved in the "folder_dir" directory, which contains tw
 1. File "global_setup_save.mat", which contains the simulation parameter setups. 
 2. The rest of the output files are named by the subnet number and alg_seed (SGD random seed). Suppose there are n subnetworks, then for each SGD random seed, there should be n files, one for each subnet. Each such file contains "para_set" that contains all the parameter setups of the simulation. The "save_result" contains the parameter estimation history and result. The estimated line parameters are the "w" structure in save_result.w_history_record that corresponds to lowest loss function values in the save_result.loss_fun_history.
 
+The outputs are updated after every epoch. Thus, even if the code is still running, intermediate results can be found in the saving folder.
+
 ## Perform constrained or MAP line parameter estimation.
-Run "NLGNNdiff_par_prior.m" to perform the constrained or MAP line parameter estimation. The parameter setups are similar to the code of "NLGNNdiff_par_basic.m", but pay attention to the follows:
+Run "NLGNNdiff_par_prior.m" to perform the constrained or MAP line parameter estimation. "NLGNNdiff_par_basic.m" needs to run before this code to provide basic estimation results, which determines prior distribution parameters. The parameter setups are similar to the code of "NLGNNdiff_par_basic.m", but pay attention to the follows:
 1. prior_adjust_ratio: This needs to be set to 1.
 2. dir_basic_result: A user must define it correctly. This is the directory folder containing the results of the basic method. This will be used to estimate the prior distribution parameters.
 3. alg_seed_list: This must be the same as the alg_seed_list with with the basic method results are collected.
@@ -78,3 +80,7 @@ Output: (in the workspace after running the code)
 1. MADR_improve_end_table: A table of two columns. Colum 1 is the SGD seed, column 2 is the MADR improvement (%) of using this seed in the SGD. This table is meaningless if a user do not provide the true parameter values in the "Input_struct" when doing the parameter estimation.
 2. The global_w_end_full: This stores the estiamted line parameters (full network) of using different SGD seeds. A user can use this as the parameter estimation result.
 
+## The example in the code
+The code in the folder is already an example of estimating the parameters of the modified IEEE 37-bus feeder, with the PMUs installed at node 702, 708, and the network is partitioned by cutting line 702-703 and 708-733. The measurement data is of 90 days' half hourly data.
+
+A user can refer to the code first and then make their own chanages to work on other tests.
