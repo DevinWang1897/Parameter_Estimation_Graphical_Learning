@@ -34,5 +34,37 @@ Note about the data:
 2. All the voltage angle data are stored as radian.
 3. All the power measuresent data are transformed as follows, the power in watt or var is devided by the square of nominal voltage (the per unit base voltage).
 
+## Perform basic or constrained line parameter estimation.
+Run "NLGNNdiff_par_basic.m" to perform the basic graphical learning algorithm to estiamte the line parameters. Constraints can also be added in this code. The following parameters or variables in the code can be adjusted or defined:
+1. Max_para_num: maximum number of parallel threads to run.
+2. In line 18, the directory of input data ("Input_struct") should be defined.
+3. alg_seed_list: A list of random seeds to control the stochastic gradient descent (SGD). A use can use one seed to get one result, or a list of seeds to get multiple results.
+4. error_ratio: The assumed ratio of error of the initial parameters. For example, if we assume the initial parameters are within 50% of the true values, then we can set error_ratio to 0.5.
+5. batch_size: The size of the mini batches in SGD.
+6. max_iter: The maximum iteration numbers of the SGD.
+7. threshold_ratio: The ratio controlling how well the forward function converges. Smaller ratio means better convergence, but also means longer running time.
+8. early_stop_patience: Early stop patience.
+9. early_stop_threshold_ratio: A ration defining how much improvement is needed to becaled an improvement in early stopping.
+10. initial_step_size: Standard step size for each back tracking line search.
+11. step_dynamic_beta: variables to control the dynamic initial step size.
+12. min_step_threshold: minimum step size of the dynamic initial step size.
+13. max_step_threshold: maximum step size of the dynamic initial step size.
+14. alpha: The alpha of back tracking line search.
+15. beta: The beta of back tracking line search.
+16. folder_dir: The folder directory to save the parameter estimation results.
+17. description_txt: A text describing the simulation.
+18. limit_range_txt: If we use range constraints, set it to 'yes', otherwise 'no'.
+19. prior_adjust_ratio: must be 0 because this is a basic or constrained run, but no MAP prior is used.
 
+The output of the code is saved in the "folder_dir" directory, which contains two kinds of files:
+1. File "global_setup_save.mat", which contains the simulation parameter setups. 
+2. The rest of the output files are named by the subnet number and alg_seed (SGD random seed). Suppose there are n subnetworks, then for each SGD random seed, there should be n files, one for each subnet. Each such file contains "para_set" that contains all the parameter setups of the simulation. The "save_result" contains the parameter estimation history and result. The estimated line parameters are the "w" structure in save_result.w_history_record that corresponds to lowest loss function values in the save_result.loss_fun_history.
+
+## Perform constrained or MAP line parameter estimation.
+Run "NLGNNdiff_par_prior.m" to perform the constrained or MAP line parameter estimation. The parameter setups are similar to the code of "NLGNNdiff_par_basic.m", but pay attention to the follows:
+1. prior_adjust_ratio: This needs to be set to 1.
+2. dir_basic_result: A user must define it correctly. This is the directory folder containing the results of the basic method. This will be used to estimate the prior distribution parameters.
+3. alg_seed_list: This must be the same as the alg_seed_list with with the basic method results are collected.
+
+The output files have similar format as "NLGNNdiff_par_basic.m".
 
